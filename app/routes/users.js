@@ -45,11 +45,12 @@ router.post('/sign_in', async (req, res) => {
      * false, para não listar a senha do usuário nos selects.
      */ 
     const userDocument = await User.findOne({email}).select('+password') 
+    let samePassword = false
     
     if(userDocument){
-      const samePassword = await userDocument.comparePassword(password,userDocument.password)
+      samePassword = await userDocument.comparePassword(password,userDocument.password)
     }
-      
+     
     if (!userDocument || !samePassword) {
       return res
         .status(401)
